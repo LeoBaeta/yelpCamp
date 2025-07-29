@@ -24,7 +24,7 @@ const seedDb = async () => {
     for (let i = 0; i < 50; i++) {
         const ramdom1000 = Math.floor(Math.random() * 1000);
         const camp = new Campground({
-            title: `Campground ${sample(descriptors)} ${sample(places)}`,
+            title: `${sample(descriptors)} ${sample(places)}`,
             price: Math.floor(Math.random() * 20) + 10,
             description: 'This is a great campground.',
             location: `${cities[ramdom1000].city}, ${cities[ramdom1000].state}`,
