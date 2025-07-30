@@ -20,12 +20,24 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.urlencoded( {extended : true} ));
+
 app.get('/', (req, res) => {
     res.render('home');
 });
+
 app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/campgrounds', { campgrounds });
+});
+// This route below should come before the :id route to avoid conflicts (Otherwise, it will interpret '/new' as an id)
+app.get('/campgrounds/new', async (req, res) => {
+    res.render('campgrounds/new');
+});
+app.post('/campgrounds', async (req, res) => {
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`campgrounds/${campground._id}`); // Redirect to the newly created campground's show page
 });
 app.get('/campgrounds/:id', async (req, res) => {
     const campground = await Campground.findById(req.params.id);
