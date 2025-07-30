@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded( {extended : true} ));
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method')); // Used for PUT and DELETE requests
 
 app.get('/', (req, res) => {
     res.render('home');
@@ -54,6 +54,11 @@ app.put('/campgrounds/:id', async (req, res) => {
     const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
     res.redirect(`/campgrounds/${campground._id}`)
 })
+app.delete('/campgrounds/:id', async (req, res) => {
+    const {id} = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
+});
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
